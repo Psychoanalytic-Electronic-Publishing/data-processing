@@ -1,6 +1,7 @@
 module "stat_updater_lambda" {
   source        = "terraform-aws-modules/lambda/aws"
   function_name = "${var.stack_name}-handler-${var.env}"
+  timeout       = 10
   source_path = [{
     path = "../dispatch",
     commands = [
