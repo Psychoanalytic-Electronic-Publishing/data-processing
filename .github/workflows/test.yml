@@ -1,0 +1,22 @@
+name: Test pipeline
+
+concurrency:
+  group: ${{ github.ref }}-test
+  cancel-in-progress: false
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: "Test job"
+    runs-on: ubuntu-latest
+    inputs:
+
+    steps:
+      - name: Test step
+        run: echo "Hello, ${{ inputs.name }}!"
