@@ -1,34 +1,40 @@
-import { Octokit } from "@octokit/rest";
+import { App } from "octokit";
 
 interface Event {
   name: string;
   workflow: string;
 }
 
+const getEnv = (name: string) => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} is not set`);
+  }
+  return value;
+};
+
 export async function main(event: Event) {
-  if (!process.env.GITHUB_TOKEN) {
-    throw new Error("GITHUB_TOKEN is not set");
-  }
+  const privateKey = Buffer.from(
+    getEnv("GITHUB_PRIVATE_KEY"),
+    "base64"
+  ).toString();
 
-  if (!process.env.GITHUB_OWNER) {
-    throw new Error("GITHUB_OWNER is not set");
-  }
-
-  if (!process.env.GITHUB_REPOSITORY) {
-    throw new Error("GITHUB_REPOSITORY is not set");
-  }
-
-  const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
+  const app = new App({
+    appId: getEnv("GITHUB_APP_ID"),
+    privateKey: privateKey,
   });
+
+  const octokit = await app.getInstallationOctokit(
+    parseInt(getEnv("GITHUB_INSTALLATION_ID"))
+  );
 
   await octokit.request(
     "POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches",
     {
-      owner: process.env.GITHUB_OWNER,
-      repo: process.env.GITHUB_REPOSITORY,
+      owner: getEnv("GITHUB_OWNER"),
+      repo: getEnv("GITHUB_REPOSITORY"),
       workflow_id: event.workflow,
-      ref: "dispatch",
+      ref: "main",
       inputs: {
         name: event.name,
       },
