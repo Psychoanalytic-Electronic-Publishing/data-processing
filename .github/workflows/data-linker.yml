@@ -1,0 +1,13 @@
+name: Run data linker
+
+concurrency:
+  group: ${{ github.ref }}-data-linker
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: "Test job"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test step
+        run: echo "Hello World"
