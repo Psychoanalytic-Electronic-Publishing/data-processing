@@ -13,9 +13,19 @@ variable "stack_name" {
   default     = "pep-data-processing"
 }
 
-variable "github_token" {
-  description = "GitHub token"
+variable "github_private_key" {
+  description = "GitHub private key"
   sensitive   = true
+}
+
+variable "github_app_id" {
+  description = "GitHub app ID"
+  default     = 306306
+}
+
+variable "github_installation_id" {
+  description = "GitHub installation ID"
+  default     = 35322311
 }
 
 variable "github_owner" {
