@@ -41,4 +41,44 @@ describe("dispatch", () => {
       parseInt(process.env.GITHUB_INSTALLATION_ID!)
     );
   });
+
+  it("throws an error if GITHUB_PRIVATE_KEY is not set", async () => {
+    delete process.env.GITHUB_PRIVATE_KEY;
+
+    await expect(main({} as any)).rejects.toThrowError(
+      "GITHUB_PRIVATE_KEY is not set"
+    );
+  });
+
+  it("throws an error if GITHUB_APP_ID is not set", async () => {
+    delete process.env.GITHUB_APP_ID;
+
+    await expect(main({} as any)).rejects.toThrowError(
+      "GITHUB_APP_ID is not set"
+    );
+  });
+
+  it("throws an error if GITHUB_INSTALLATION_ID is not set", async () => {
+    delete process.env.GITHUB_INSTALLATION_ID;
+
+    await expect(main({} as any)).rejects.toThrowError(
+      "GITHUB_INSTALLATION_ID is not set"
+    );
+  });
+
+  it("throws an error if GITHUB_OWNER is not set", async () => {
+    delete process.env.GITHUB_OWNER;
+
+    await expect(main({} as any)).rejects.toThrowError(
+      "GITHUB_OWNER is not set"
+    );
+  });
+
+  it("throws an error if GITHUB_REPOSITORY is not set", async () => {
+    delete process.env.GITHUB_REPOSITORY;
+
+    await expect(main({} as any)).rejects.toThrowError(
+      "GITHUB_REPOSITORY is not set"
+    );
+  });
 });
