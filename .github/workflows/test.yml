@@ -5,7 +5,7 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       name:
         required: true
@@ -15,7 +15,6 @@ jobs:
   test:
     name: "Test job"
     runs-on: ubuntu-latest
-    inputs:
 
     steps:
       - name: Test step
