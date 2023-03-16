@@ -1,7 +1,7 @@
 import { App } from "octokit";
 
 interface Event {
-  name: string;
+  inputs: { [key: string]: string };
   workflow: string;
 }
 
@@ -35,9 +35,7 @@ export async function main(event: Event) {
       repo: getEnv("GITHUB_REPOSITORY"),
       workflow_id: event.workflow,
       ref: "main",
-      inputs: {
-        name: event.name,
-      },
+      inputs: event.inputs,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
