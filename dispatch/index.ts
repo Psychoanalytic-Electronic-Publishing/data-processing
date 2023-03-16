@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/rest";
 
 interface Event {
   name: string;
+  workflow: string;
 }
 
 export async function main(event: Event) {
@@ -17,10 +18,6 @@ export async function main(event: Event) {
     throw new Error("GITHUB_REPOSITORY is not set");
   }
 
-  if (!process.env.GITHUB_WORKFLOW) {
-    throw new Error("GITHUB_WORKFLOW is not set");
-  }
-
   const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
   });
@@ -30,7 +27,7 @@ export async function main(event: Event) {
     {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPOSITORY,
-      workflow_id: process.env.GITHUB_WORKFLOW,
+      workflow_id: event.workflow,
       ref: "dispatch",
       inputs: {
         name: event.name,
