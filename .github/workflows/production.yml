@@ -10,7 +10,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  env:
+    name: "Setup dynamic environment variables"
+    runs-on: ubuntu-latest
+    environment: production-vars
+    outputs:
+      github_app_id: ${{ steps.set-outputs.outputs.github_app_id}}
+      github_installation_id: ${{ steps.set-outputs.outputs.github_installation_id }}
+      github_owner: ${{ steps.set-outputs.outputs.github_owner }}
+      github_repo: ${{ steps.set-outputs.outputs.github_repo }}
+    steps:
+      - name: Set output
+        id: set-outputs
+        run: |
+          echo "github_app_id=${{ vars.GH_APP_ID }}" >> $GITHUB_OUTPUT
+          echo "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" >> $GITHUB_OUTPUT
+          echo "github_owner=${{ vars.GH_OWNER }}" >> $GITHUB_OUTPUT
+          echo "github_repo=${{ vars.GH_REPO }}" >> $GITHUB_OUTPUT
+
   infrastructure:
+    needs: [env]
     uses: jordanallen-dev/reusable-terraform-workflow/.github/workflows/terraform.yml@main
     with:
       module-path: infra
@@ -19,3 +38,8 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ENV_VARS: "TF_VAR_github_private_key=${{ secrets.GH_PRIVATE_KEY }}\n\
+        TF_VAR_github_app_id=${{ needs.env.outputs.github_app_id }}\n\
+        TF_VAR_github_installation_id=${{ needs.env.outputs.github_installation_id }} \n\
+        TF_VAR_github_owner=${{ needs.env.outputs.github_owner }}\n\
+        TF_VAR_github_repo=${{ needs.env.outputs.github_repo }}"
