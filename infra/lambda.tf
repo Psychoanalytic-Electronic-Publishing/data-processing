@@ -7,7 +7,7 @@ module "stat_updater_lambda" {
     commands = [
       "npm install",
       "npm run build",
-      ":zip",
+      ":zip ./ ../infra/builds",
       "npm run clean"
     ]
   }]
