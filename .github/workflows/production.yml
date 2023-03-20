@@ -18,7 +18,7 @@ jobs:
       github_app_id: ${{ steps.set-outputs.outputs.github_app_id}}
       github_installation_id: ${{ steps.set-outputs.outputs.github_installation_id }}
       github_owner: ${{ steps.set-outputs.outputs.github_owner }}
-      github_repo: ${{ steps.set-outputs.outputs.github_repo }}
+      github_repository: ${{ steps.set-outputs.outputs.github_repository }}
     steps:
       - name: Set output
         id: set-outputs
@@ -26,7 +26,7 @@ jobs:
           echo "github_app_id=${{ vars.GH_APP_ID }}" >> $GITHUB_OUTPUT
           echo "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" >> $GITHUB_OUTPUT
           echo "github_owner=${{ vars.GH_OWNER }}" >> $GITHUB_OUTPUT
-          echo "github_repo=${{ vars.GH_REPO }}" >> $GITHUB_OUTPUT
+          echo "github_repository=${{ vars.GH_REPO }}" >> $GITHUB_OUTPUT
 
   infrastructure:
     needs: [env]
@@ -42,4 +42,4 @@ jobs:
         TF_VAR_github_app_id=${{ needs.env.outputs.github_app_id }}\n\
         TF_VAR_github_installation_id=${{ needs.env.outputs.github_installation_id }} \n\
         TF_VAR_github_owner=${{ needs.env.outputs.github_owner }}\n\
-        TF_VAR_github_repo=${{ needs.env.outputs.github_repo }}"
+        TF_VAR_github_repository=${{ needs.env.outputs.github_repository }}"
